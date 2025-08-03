@@ -87,7 +87,7 @@ def block_to_parentnode(block):
     match block_type:
         case BlockType.PARAGRAPH:
             children = text_to_textnodes(block)
-            if len(children) > 1:
+            if len(children) > 0:
                 children_nodes = list(map(text_node_to_html_node, children))
                 node = ParentNode("p", children_nodes)
             else:
@@ -99,7 +99,7 @@ def block_to_parentnode(block):
             # Remove the markdown formatting
             block = block.lstrip("# ")
             children = text_to_textnodes(block)
-            if len(children) > 1:
+            if len(children) > 0:
                 children_nodes = list(map(text_node_to_html_node, children))
                 node = ParentNode(f"h{h_number}", children_nodes)
             else:
@@ -116,7 +116,7 @@ def block_to_parentnode(block):
             lines = list(map(lambda x: x.lstrip("> "), lines))
             block = "\n".join(lines)
             children = text_to_textnodes(block)
-            if len(children) > 1:
+            if len(children) > 0:
                 children_nodes = list(map(text_node_to_html_node, children))
                 node = ParentNode("blockquote", children_nodes)
             else:
@@ -144,8 +144,8 @@ def extract_list_elements(block, block_type):
     list_items = []
     for l in stripped_lines:
         children = text_to_textnodes(l)
-        if len(children) > 1:
-            list_items = list(map(text_node_to_html_node, list_items))
+        if len(children) > 0:
+            children = list(map(text_node_to_html_node, children))
             list_items.append(ParentNode("li", children))
         else:
             list_items.append(LeafNode("li", l))

@@ -25,7 +25,7 @@ class TextNode():
     def __eq__(self, other):
         return self.text == other.text and self.text_type == other.text_type and self.url == other.url
     def __repr__(self):
-        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+        return f"\nTextNode({self.text}, {self.text_type.value}, {self.url})"
     
 
 def block_to_blocktype(single_block):
@@ -35,7 +35,7 @@ def block_to_blocktype(single_block):
         return BlockType.HEADING
     
     # Check if it is quote
-    brackets = re.findall(r"(^|\n)> ", single_block)
+    brackets = re.findall(r"^> |^>\n", single_block, re.M)
     newlines = single_block.split("\n")
     if len(brackets) == len(newlines):
         return BlockType.QUOTE
@@ -46,7 +46,7 @@ def block_to_blocktype(single_block):
         return BlockType.CODE
     
     # Check if it is an unordered list
-    listitems = re.findall(r"(^|\n)- ", single_block)
+    listitems = re.findall(r"^- ", single_block, re.M)
     newlines = single_block.split("\n")
     if len(listitems) == len(newlines):
         return BlockType.UNORDERED_LIST
@@ -81,6 +81,18 @@ def extract_markdown_links(text):
         url = re.findall(r"\(.*?\)", s)[0][1:-1]
         result_list.append((link_text, url))
     return result_list
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+    title = None
+    for b in blocks:
+        if block_to_blocktype(b) == BlockType.HEADING:
+            heading = b.split(maxsplit=1)
+            if len(heading[0]) == 1:
+                title = heading[1]
+    if title == None:
+        raise Exception("A level 1 heading is required as the page title")
+    return title
 
 def markdown_to_blocks(text):
     splittext = text.split("\n\n")

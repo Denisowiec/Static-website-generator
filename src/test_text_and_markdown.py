@@ -318,6 +318,33 @@ class TestTextToTextNode(unittest.TestCase):
                               TextNode(" and some ", TextType.PLAIN),
                               TextNode("bold text", TextType.BOLD),
                               TextNode(".", TextType.PLAIN)])
+        
+class TestExtractTitle(unittest.TestCase):
+    def test_extract_title(self):
+        md = """# Title should be this
+
+Some other stuff
+
+> A quote
+> continues"""
+        title = extract_title(md)
+        self.assertEqual(title, "Title should be this")
+    
+    def test_extract_title_from_middle(self):
+        md = """### This is a level 3 heading
+
+This is some paragraph
+
+## This is level 2 heading
+
+# Title should be this
+
+Some more text
+
+## Some other heading
+"""
+        title = extract_title(md)
+        self.assertEqual(title, "Title should be this")
 
 
 

@@ -122,5 +122,15 @@ the **same** even with inline stuff</code></pre></div>""",
         html = node.to_html()
         self.assertEqual(html,"<div><h3>This is an unordered list</h3><ul><li>First list item</li><li>Second list item</li><li>Third list item</li></ul></div>")
 
+    def test_link_in_beginning(self):
+        md = """# Tolkien Fan Club
+
+![JRR Tolkien sitting](/images/tolkien.png)
+
+Here's the deal, **I like Tolkien**."""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(html, "<div><h1>Tolkien Fan Club</h1><p><img src=\"images/tolkien.png\" alt=\"JRR Tolkien sitting\" /></p><p>Here's the deal, <b>I like Tolkien</b>.</p></div>")
+
 if __name__ == "__main__":
     unittest.main()
