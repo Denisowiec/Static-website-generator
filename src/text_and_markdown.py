@@ -119,6 +119,8 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 new_nodes.append(TextNode(split_text[1], text_type))
                 if len(split_text[2]) > 0:
                     text = split_text[2]
+                else:
+                    break
             if len(text) > 0:
                 new_nodes.append(TextNode(text, TextType.PLAIN))
 

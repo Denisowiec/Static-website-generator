@@ -47,10 +47,26 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_path, "w") as file:
         file.write(content)
 
+def generate_pages_recursive(from_path, template_path, dest_path):
+    contents = os.listdir(from_path)
+    for f in contents:
+        file = os.path.join(from_path, f)
+        if os.path.isdir(file):
+            dest = os.path.join(dest_path, f)
+            if not os.path.exists(dest):
+                os.mkdir(dest)
+            generate_pages_recursive(file, template_path, dest)
+        elif os.path.isfile(file):
+            if file[-2:] == "md":
+                name = os.path.basename(file)[:-3]
+                generate_page(file, template_path, os.path.join(dest_path, name + ".html"))
+
+
 
 def main():
     copy_contents(DIR_STATIC, DIR_PUBLIC)
-    generate_page(os.path.join(DIR_CONTENT, "index.md"), "template.html", os.path.join(DIR_PUBLIC, "index.html"))
+    generate_pages_recursive(DIR_CONTENT, "template.html", DIR_PUBLIC)
+    #/index.md", "template.html", "public/blog/majesty/index.html")
 
 if __name__=="__main__":
     main()
