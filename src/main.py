@@ -57,7 +57,7 @@ def generate_pages_recursive(from_path, template_path, dest_path, base_path):
             dest = os.path.join(dest_path, f)
             if not os.path.exists(dest):
                 os.mkdir(dest)
-            generate_pages_recursive(file, template_path, dest,base_path)
+            generate_pages_recursive(file, template_path, dest, base_path)
         elif os.path.isfile(file):
             if file[-2:] == "md":
                 name = os.path.basename(file)[:-3]
